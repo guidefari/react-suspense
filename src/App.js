@@ -1,51 +1,45 @@
-import React, {Suspense} from 'react'
+import React, { Suspense } from 'react';
 import './App.css';
-import {fetchData} from './Api'
+import styled from 'styled-components';
+import { fetchData } from './Api';
 
 // instead of just bringing in a promise, look at what fetchData() returns
-const resource = fetchData()
+const resource = fetchData();
 
 function App() {
   return (
     <div className="App">
       <Suspense fallback={<h1>Loading User😬</h1>}>
-        <ProfileDetails/>
-      </Suspense>
-      <Suspense fallback={<h1>Loading Posts😬</h1>}>
-        <ProfilePosts/>
+        <ProfileDetails />
       </Suspense>
     </div>
   );
 }
 
 const ProfileDetails = () => {
-  const user = resource.user.read()
+  const user = resource.user.read();
 
   return (
-    <div>
-      <h1>{user.name}</h1>
+    <Wrapper>
+      <Heading>{user.name}</Heading>
       <ul>
         <li>Username: {user.username}</li>
         <li>Email: {user.email}</li>
         <li>City: {user.address.city}</li>
       </ul>
-    </div>
-  )
-}
+    </Wrapper>
+  );
+};
 
-const ProfilePosts = () => {
-  const posts = resource.posts.read()
+const Heading = styled.h1`
+  font-size: 1.5em;
+  text-align: center;
+  color: palevioletred;
+`;
 
-  return (
-    <ul>
-      <li>
-        <strong>Latest Posts</strong>
-      </li>
-      {posts.map(post => (
-        <li key={post.id}>{post.title}</li>
-      ))}
-    </ul>
-  )
-}
+const Wrapper = styled.section`
+  padding: 4em;
+  background: papayawhip;
+`;
 
 export default App;
